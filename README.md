@@ -52,6 +52,43 @@ You don't flip a switch. It kicks in two ways:
 - **On demand** — just say *"use dispatch"* or *"delegate this"* and it follows
   the rulebook.
 
+## Example
+
+> **You:** In `src/`, find every file that still calls the old `fetch_prices`
+> API and update it to the new `get_prices` signature.
+
+With `dispatch` active, the main model doesn't do all of that itself — it
+orchestrates:
+
+1. **Plans** the steps.
+2. Sends **`scan-lite`** (cheap) to find every file that calls `fetch_prices`.
+3. Sends **`edit-lite`** (cheap) to apply the signature change in each file.
+4. Sends **`verify-lite`** to run the test suite and report **PASS/FAIL** — a
+   check that can actually fail.
+5. The main model reviews the results, fixes anything the tests caught, and
+   reports back.
+
+You get the same outcome, but the boring legwork ran on cheaper, faster helpers
+instead of burning your Opus usage — and nothing is called "done" until a real
+test passed.
+
+## Install on another machine
+
+It's just four text files, so it copies anywhere. This repo is **private**, so
+the other machine needs access to pull it — either your SSH key for this account
+is present there, or you make the repo public first.
+
+```sh
+git clone git@github.com:luxint66/claude-dispatch.git
+cd claude-dispatch
+cp -r skills/dispatch  ~/.claude/skills/
+cp    agents/*.md      ~/.claude/agents/
+# then restart Claude Code so the agents load
+```
+
+(If you keep it private and haven't set up the key on that box, clone with a
+GitHub token instead, or make the repo public for a keyless HTTPS clone.)
+
 ---
 
 ## Reference (technical details)
