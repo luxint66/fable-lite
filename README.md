@@ -34,6 +34,15 @@ do the legwork on cheaper, faster models. That division of labor plus the
 > Note: if you're on a Claude subscription, using cheaper helpers doesn't save
 > money — the win is preserving your Opus usage limits and getting faster answers.
 
+## Why this exists
+
+Fable had me excited — the discipline, the depth, the quality of the results.
+What I wasn't excited about was paying a frontier price for every keystroke. So I
+went looking for the halfway point, and this is where I landed: keep a capable
+model as the decision-maker, and let cheaper models do the legwork it hands them.
+Most of the quality, a fraction of the spend. Not a replacement for Fable — a
+pragmatic middle ground for the rest of us.
+
 ## How to install
 
 Copy the files into your Claude Code config, then restart:
