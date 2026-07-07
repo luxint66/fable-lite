@@ -3,6 +3,10 @@
 Make [Claude Code](https://claude.com/claude-code) **work like Fable** — without
 changing which model you run.
 
+> **Requirements:** [Claude Code](https://claude.com/claude-code). The core skill
+> and three agents have no other dependencies; the optional web agents need extra
+> tools (see below).
+
 ## What is this, in plain language
 
 "Fable mode" isn't a smarter model or a magic switch. It's a **working style**:
