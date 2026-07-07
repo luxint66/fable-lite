@@ -31,8 +31,8 @@ So the expensive model stays the "boss" doing the thinking, and the three helper
 do the legwork on cheaper, faster models. That division of labor plus the
 "check that can fail" habit **is** the Fable-like behavior.
 
-> Note: if you're on a Claude subscription, using cheaper helpers doesn't save
-> money — the win is preserving your Opus usage limits and getting faster answers.
+> Note: on a Claude subscription your bill is fixed, so cheaper helpers don't save
+> money — they conserve your Opus limits and answer faster.
 
 ## Why this exists
 
