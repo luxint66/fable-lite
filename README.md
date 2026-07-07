@@ -72,22 +72,23 @@ You get the same outcome, but the boring legwork ran on cheaper, faster helpers
 instead of burning your Opus usage — and nothing is called "done" until a real
 test passed.
 
+For a full worked run on a real project — the actual delegation, token costs, and
+verified output — see [`docs/example-session.md`](docs/example-session.md).
+
 ## Install on another machine
 
-It's just four text files, so it copies anywhere. This repo is **private**, so
-the other machine needs access to pull it — either your SSH key for this account
-is present there, or you make the repo public first.
+It's just four text files, so it copies anywhere:
 
 ```sh
-git clone git@github.com:luxint66/claude-dispatch.git
+git clone https://github.com/luxint66/claude-dispatch.git
 cd claude-dispatch
 cp -r skills/dispatch  ~/.claude/skills/
 cp    agents/*.md      ~/.claude/agents/
 # then restart Claude Code so the agents load
 ```
 
-(If you keep it private and haven't set up the key on that box, clone with a
-GitHub token instead, or make the repo public for a keyless HTTPS clone.)
+(A public repo clones over HTTPS with no credentials. If you keep the repo
+private, the box needs an SSH key or token to clone.)
 
 ## Optional: web agents
 
@@ -150,3 +151,7 @@ If it hangs on a stale daemon, `pkill -f hermes` and retry.
   honor it.
 - The frontmatter key is `effort` (agents/skills); the settings.json key is the
   differently-named `effortLevel`.
+
+## License
+
+[MIT](LICENSE) © luxint66
