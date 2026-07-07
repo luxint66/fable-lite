@@ -11,6 +11,10 @@ Effort ceiling is **high** — never xhigh, never max.
 Note: on a subscription plan, cheaper models do not save dollars. The win is
 preserving Opus rate-limit/quota and speed. Delegate for that, not for cost.
 
+Assumes an Opus main session. On Sonnet the boss-tier judgment drops a tier and
+`edit-lite`/`verify-lite` are same-tier — you keep context isolation and
+parallelism but lose the tier savings.
+
 ## Keep local (Opus, this session)
 - Decomposing ambiguous work into parallel slices
 - Architecture / product / safety tradeoffs
