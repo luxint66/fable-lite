@@ -1,6 +1,6 @@
 # Example session
 
-A real run of `dispatch` on a small multi-file task, showing how the main model
+A real run of `fable-lite` on a small multi-file task, showing how the main model
 keeps the judgment and offloads the legwork to cheaper agents — and how nothing
 is called "done" until a check that can fail has passed.
 
@@ -28,9 +28,9 @@ tests/
 > tested, and fix the gaps. All tests must pass.
 
 No mention of the skill — this task is big enough (independent slices + a
-project-wide scan) that `dispatch` auto-triggered on its own.
+project-wide scan) that `fable-lite` auto-triggered on its own.
 
-## What dispatch did
+## What fable-lite did
 
 1. **Kept the one real design decision local (Opus).** The longest-line metric
    needs line structure that the words list throws away. Rather than hack around

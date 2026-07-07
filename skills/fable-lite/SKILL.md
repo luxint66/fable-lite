@@ -1,9 +1,9 @@
 ---
-name: dispatch
-description: Tiered delegation for codebase-heavy or token-heavy work. Use when a task spans multiple files, sources, or steps and independent slices can be offloaded. Opus keeps judgment, synthesis, and verification-of-record; cheaper pre-configured subagents do bounded scans, edits, and checks. Do NOT trigger on ordinary one-shot requests a direct attempt handles fine.
+name: fable-lite
+description: Work like Fable on the cheap — tiered delegation for codebase-heavy or token-heavy work. Use when a task spans multiple files, sources, or steps and independent slices can be offloaded. Opus keeps judgment, synthesis, and verification-of-record; cheaper pre-configured subagents do bounded scans, edits, and checks. Do NOT trigger on ordinary one-shot requests a direct attempt handles fine.
 ---
 
-# Dispatch — tiered work routing
+# fable-lite — tiered work routing
 
 Route less-intensive, bounded work to cheaper subagents; keep judgment local.
 Effort ceiling is **high** — never xhigh, never max.
