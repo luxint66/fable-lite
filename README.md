@@ -89,6 +89,18 @@ cp    agents/*.md      ~/.claude/agents/
 (If you keep it private and haven't set up the key on that box, clone with a
 GitHub token instead, or make the repo public for a keyless HTTPS clone.)
 
+## Optional: web agents
+
+The `dispatch` rulebook also mentions two web helpers — **`websearch-lite`** (find
+pages) and **`webfetch-lite`** (fetch one URL). These are **not** bundled here,
+because they're not self-contained: `webfetch-lite` needs the `agent-browser` CLI,
+and `websearch-lite` also needs an `exa_search.py` script and an `EXA_API_KEY`.
+Bring your own if you want them.
+
+If they're absent, **nothing breaks** — Claude Code simply doesn't have those two
+agents and falls back to its built-in web tools. The core delegation
+(`scan-lite` / `edit-lite` / `verify-lite`) works fully without them.
+
 ---
 
 ## Reference (technical details)
