@@ -92,14 +92,41 @@ GitHub token instead, or make the repo public for a keyless HTTPS clone.)
 ## Optional: web agents
 
 The `dispatch` rulebook also mentions two web helpers — **`websearch-lite`** (find
-pages) and **`webfetch-lite`** (fetch one URL). These are **not** bundled here,
-because they're not self-contained: `webfetch-lite` needs the `agent-browser` CLI,
-and `websearch-lite` also needs an `exa_search.py` script and an `EXA_API_KEY`.
-Bring your own if you want them.
+pages) and **`webfetch-lite`** (fetch one URL). They're kept separate in
+`optional-web-agents/` because, unlike the core three, they need external tools:
+`webfetch-lite` needs the `agent-browser` CLI, and `websearch-lite` also needs the
+included `exa_search.py` script plus your own `EXA_API_KEY`.
 
-If they're absent, **nothing breaks** — Claude Code simply doesn't have those two
+If you skip them, **nothing breaks** — Claude Code just doesn't have those two
 agents and falls back to its built-in web tools. The core delegation
 (`scan-lite` / `edit-lite` / `verify-lite`) works fully without them.
+
+### Activating the web agents on a box
+
+```sh
+# 1. Install agent-browser (needed by both web agents)
+npm install -g agent-browser
+
+# 2. Put the two agent files in place
+cp optional-web-agents/websearch-lite.md \
+   optional-web-agents/webfetch-lite.md   ~/.claude/agents/
+
+# 3. websearch-lite only: install the Exa helper + your API key
+mkdir -p ~/.config/agent-browser-lite
+cp optional-web-agents/exa_search.py  ~/.config/agent-browser-lite/
+cp optional-web-agents/env.example    ~/.config/agent-browser-lite/env
+#   then edit ~/.config/agent-browser-lite/env and set your real key
+#   (get one at https://exa.ai)
+
+# 4. Restart Claude Code so the agents register
+```
+
+`webfetch-lite` works after steps 1, 2, and 4 (no Exa key needed).
+`websearch-lite` needs all four steps.
+
+**If agent-browser won't launch:** put `"--no-sandbox"` under the **top-level
+`args`** in `~/.agent-browser/config.json` (it's ignored under `launchOptions`).
+If it hangs on a stale daemon, `pkill -f hermes` and retry.
 
 ---
 
