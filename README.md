@@ -5,7 +5,7 @@ changing which model you run.
 
 > **Requirements:** [Claude Code](https://claude.com/claude-code). The core skill
 > and three agents have no other dependencies; the optional web agents need extra
-> tools (see below).
+> tools, and the optional verification gate needs Python 3 (see below).
 
 ## What is this, in plain language
 
@@ -140,6 +140,52 @@ cp optional-web-agents/env.example    ~/.config/agent-browser-lite/env
 `args`** in `~/.agent-browser/config.json` (it's ignored under `launchOptions`).
 If it hangs on a stale daemon, `pkill -f hermes` and retry.
 
+## Optional: the verification gate (Stop hook)
+
+The rulebook's **"check that can fail"** rule is, on its own, *advice* — and the
+skill itself admits a model will skip verification and pass its own introspection
+("I reviewed it and it looks right"). The gate makes that rule **binding**.
+
+`hooks/gate_stop.py` is a Claude Code **Stop hook**. At the end of each turn it
+reads the transcript, and if the turn **edited files** (`Edit`/`Write`/
+`NotebookEdit`) but **no failable check ran afterward** — a test/build/lint/run,
+a `verify-lite`/`edit-lite` delegation, or an explicit `UNVERIFIED` note — it
+**blocks the turn from ending** and sends the model back to verify. Read-only and
+exploratory turns are exempt. It honors `stop_hook_active` (blocks at most once,
+never loops) and fails open on any error, so it can never wedge a session.
+
+It's kept separate from the core three because it needs **Python 3** (stdlib
+only) and it's the one component that actively gates the session rather than just
+advising. If you skip it, nothing breaks — the "check that can fail" rule simply
+stays advisory. Enable it:
+
+```sh
+mkdir -p ~/.claude/hooks
+cp hooks/gate_stop.py ~/.claude/hooks/
+```
+
+Then add a `Stop` hook to `~/.claude/settings.json` (merge into any existing
+`hooks` block) and restart Claude Code:
+
+```json
+{
+  "hooks": {
+    "Stop": [
+      { "hooks": [
+        { "type": "command",
+          "command": "python3 ~/.claude/hooks/gate_stop.py",
+          "timeout": 10 }
+      ] }
+    ]
+  }
+}
+```
+
+The gate fires on a content signal (work-without-check) on **any** session, not
+only when fable-lite is "active." To keep it dormant, set `FABLE_LITE_GATE=0` in
+the environment; set `1`/`on`/`true` (or leave unset) to run. Full details,
+tuning, and the check/work regexes are in [`hooks/README.md`](hooks/README.md).
+
 ---
 
 ## Reference (technical details)
@@ -150,6 +196,7 @@ If it hangs on a stale daemon, `pkill -f hermes` and retry.
 | `agents/scan-lite.md` | Local codebase scan / inventory / grep-summary | haiku, no effort |
 | `agents/edit-lite.md` | Bounded, well-specified code edits | sonnet, effort: medium |
 | `agents/verify-lite.md` | Independent verification with a failable check | sonnet, effort: high |
+| `hooks/gate_stop.py` | Optional Stop-hook gate: blocks turn-end when a turn edited files but ran no failable check | Stop hook, Python 3 |
 
 ### Design notes
 
