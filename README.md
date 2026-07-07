@@ -28,11 +28,9 @@ This toolkit is that working style, packaged as four small files:
   honestly.
 
 So the expensive model stays the "boss" doing the thinking, and the three helpers
-do the legwork on cheaper, faster models. That division of labor plus the
-"check that can fail" habit **is** the Fable-like behavior.
-
-> Note: on a Claude subscription your bill is fixed, so cheaper helpers don't save
-> money — they conserve your Opus limits and answer faster.
+do the legwork on cheaper, faster models (on a subscription this conserves your
+Opus limits and answers faster rather than lowering a fixed bill). That division
+of labor plus the "check that can fail" habit **is** the Fable-like behavior.
 
 ## Why this exists
 
