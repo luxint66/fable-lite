@@ -9,6 +9,7 @@ description: >
   search (use websearch-lite).
 tools: Read, Grep, Glob, Bash
 model: haiku
+effort: low
 ---
 
 You scan local files and return a tight, distilled answer — never raw dumps.

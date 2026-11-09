@@ -15,7 +15,7 @@ check your work with a test that can actually fail. Opus can follow that same
 style — that's all this does. (You can't turn Opus *into* Fable; they're different
 models. You can only make it *work like* Fable.)
 
-This toolkit is that working style, packaged as four small files:
+This toolkit is that working style, packaged as five small files:
 
 - **`fable-lite`** — a rulebook for the main model. It says: break the task into
   steps, give the grunt work to cheap helpers, prove each result with a real
@@ -24,10 +24,12 @@ This toolkit is that working style, packaged as four small files:
   files, maps where things live).
 - **`edit-lite`** — a cheap helper that *makes small, exact edits* you've already
   decided on.
+- **`work-lite`** — a mid-price helper for *bounded jobs that need small
+  decisions*: multi-file changes, new scripts, bugs whose cause is known.
 - **`verify-lite`** — a cheap helper that *runs the tests* and reports pass/fail
   honestly.
 
-So the expensive model stays the "boss" doing the thinking, and the three helpers
+So the expensive model stays the "boss" doing the thinking, and the four helpers
 do the legwork on cheaper, faster models (on a subscription this conserves your
 Opus limits and answers faster rather than lowering a fixed bill). That division
 of labor plus the "check that can fail" habit **is** the Fable-like behavior.
@@ -50,9 +52,13 @@ cp -r skills/fable-lite  ~/.claude/skills/
 cp    agents/*.md      ~/.claude/agents/
 ```
 
-The skill works right away. The three helper agents **only load when Claude Code
+The skill works right away. The four helper agents **only load when Claude Code
 starts**, so restart your session after copying. After that, `scan-lite`,
-`edit-lite`, and `verify-lite` are available.
+`edit-lite`, `work-lite` and `verify-lite` are available.
+
+**Upgrading from an earlier version?** Copy the agents again: `edit-lite` now
+runs on Haiku instead of Sonnet, and `work-lite` is new. Nothing else changes;
+there are still no hooks, scripts or settings to install.
 
 ## How to use it
 
@@ -88,7 +94,7 @@ verified output — see [`docs/example-session.md`](docs/example-session.md).
 
 ## Install on another machine
 
-It's just four text files, so it copies anywhere:
+It's just five text files, so it copies anywhere:
 
 ```sh
 git clone https://github.com/luxint66/fable-lite.git
@@ -111,7 +117,7 @@ included `exa_search.py` script plus your own `EXA_API_KEY`.
 
 If you skip them, **nothing breaks** — Claude Code just doesn't have those two
 agents and falls back to its built-in web tools. The core delegation
-(`scan-lite` / `edit-lite` / `verify-lite`) works fully without them.
+(`scan-lite` / `edit-lite` / `work-lite` / `verify-lite`) works fully without them.
 
 ### Activating the web agents on a box
 
@@ -188,13 +194,43 @@ tuning, and the check/work regexes are in [`hooks/README.md`](hooks/README.md).
 
 ---
 
+## Evidence: which model gets which job
+
+The routing table in the skill isn't a guess. It comes from about 1,100 real
+coding tasks logged over six weeks across several machines and projects, with
+an Opus main session judging each delegated result pass or fail (any Opus
+rework counted as a fail):
+
+| Task type | Haiku pass | Sonnet pass | Verdict |
+|---|---|---|---|
+| docs | 138 / 143 | 123 / 125 | Haiku |
+| single-file-edit | 48 / 48 | 42 / 43 | Haiku |
+| new-script | 39 / 40 | 66 / 68 | Haiku |
+| config | 13 / 13 | 6 / 7 | Haiku |
+| rename | 5 / 5 | 2 / 2 | Haiku (small sample, low risk) |
+| multi-file-edit | 6 / 8 | 258 / 268 | Sonnet: Haiku failed 2 of 8 |
+| known-bug-fix | — | 37 / 39 | Sonnet |
+| single-file-feature | — | 46 / 47 | Sonnet |
+| tests | 1 / 1 | 1 / 1 | Sonnet by default: too few runs to decide |
+| debug (cause unknown) | — | — | Opus: almost always needs live judgment |
+
+Results are for Haiku 5.5 and Sonnet 5.5. Two caveats:
+
+- The pass/fail grades come from the same Opus session that wrote the brief. An
+  independent check, whether a delegated commit was reverted or fixed within
+  48 hours, found 4 reworked out of 186 commits it could see.
+- Of the delegated failures, about a quarter were agents rewriting the exact
+  commit message they were given and a third were formatting slips. Both are
+  why the skill keeps commits on the main model and asks for a full diff read.
+
 ## Reference (technical details)
 
 | Path | Role | Model / effort |
 |---|---|---|
 | `skills/fable-lite/SKILL.md` | Routing rulebook: partition table, "check that can fail" rule, replan budget, effort ceiling | main session |
-| `agents/scan-lite.md` | Local codebase scan / inventory / grep-summary | haiku, no effort |
-| `agents/edit-lite.md` | Bounded, well-specified code edits | sonnet, effort: medium |
+| `agents/scan-lite.md` | Local codebase scan / inventory / grep-summary | haiku, effort: low |
+| `agents/edit-lite.md` | Decided, mechanical edits (docs, one-file edits, config, renames) | haiku, effort: low |
+| `agents/work-lite.md` | Bounded jobs with small judgment calls (multi-file edits, new scripts, known-cause fixes) | sonnet, effort: high (the skill passes haiku for new scripts) |
 | `agents/verify-lite.md` | Independent verification with a failable check | sonnet, effort: high |
 | `hooks/gate_stop.py` | Optional Stop-hook gate: blocks turn-end when a turn edited files but ran no failable check | Stop hook, Python 3 |
 
@@ -205,8 +241,9 @@ tuning, and the check/work regexes are in [`hooks/README.md`](hooks/README.md).
   `/effort <level>`, or `--effort`. The "adjustment" here comes from routing work
   to a pre-configured agent whose effort is baked in.
 - **Effort ceiling is `high`** by convention — the skill forbids `xhigh`/`max`.
-- **Haiku ignores effort**, so `scan-lite` omits the field. Only sonnet/opus
-  honor it.
+- **Per-task model.** The skill's routing table passes `model` on each Agent
+  call, which overrides the agent's frontmatter default. So one `work-lite`
+  agent serves both the Haiku and the Sonnet rows.
 - The frontmatter key is `effort` (agents/skills); the settings.json key is the
   differently-named `effortLevel`.
 
