@@ -60,7 +60,7 @@ the **current turn** (everything since your last prompt):
 3. Restart Claude Code.
 
 Requires **Python 3** (stdlib only — no packages). This is the only fable-lite
-component that needs Python; the core skill + three agents remain zero-dependency.
+component that needs Python; the core skill + four agents remain zero-dependency.
 
 ## Tune / opt out
 

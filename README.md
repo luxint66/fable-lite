@@ -4,7 +4,7 @@ Make [Claude Code](https://claude.com/claude-code) **work like Fable** — witho
 changing which model you run.
 
 > **Requirements:** [Claude Code](https://claude.com/claude-code). The core skill
-> and three agents have no other dependencies; the optional web agents need extra
+> and four agents have no other dependencies; the optional web agents need extra
 > tools, and the optional verification gate needs Python 3 (see below).
 
 ## What is this, in plain language
@@ -111,7 +111,7 @@ private, the box needs an SSH key or token to clone.)
 
 The `fable-lite` rulebook also mentions two web helpers — **`websearch-lite`** (find
 pages) and **`webfetch-lite`** (fetch one URL). They're kept separate in
-`optional-web-agents/` because, unlike the core three, they need external tools:
+`optional-web-agents/` because, unlike the core four, they need external tools:
 `webfetch-lite` needs the `agent-browser` CLI, and `websearch-lite` also needs the
 included `exa_search.py` script plus your own `EXA_API_KEY`.
 
@@ -160,7 +160,7 @@ a `verify-lite`/`edit-lite` delegation, or an explicit `UNVERIFIED` note — it
 exploratory turns are exempt. It honors `stop_hook_active` (blocks at most once,
 never loops) and fails open on any error, so it can never wedge a session.
 
-It's kept separate from the core three because it needs **Python 3** (stdlib
+It's kept separate from the core four because it needs **Python 3** (stdlib
 only) and it's the one component that actively gates the session rather than just
 advising. If you skip it, nothing breaks — the "check that can fail" rule simply
 stays advisory. Enable it:
